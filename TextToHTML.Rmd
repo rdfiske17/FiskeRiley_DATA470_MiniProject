@@ -1,0 +1,68 @@
+---
+title: "TextToHTML"
+author: "Riley Fiske"
+date: "2024-09-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(ggplot2)
+```
+
+# Load in the Data and create an easy model
+```{r}
+
+FM_Housing <- read.csv("FM_Housing_2018_2022_clean.csv") %>%
+  mutate(Start.Date = as.Date(Start.Date, format = "%Y-%M-%d"),
+         Sold.Date = as.Date(Sold.Date, format = "%Y-%M-%d"),
+         Property.Type = as.factor(Property.Type),
+         Book.Section = as.factor(Book.Section),
+         City = as.factor(City),
+         State.Province = as.factor(State.Province),
+         County = as.factor(County),
+         Style = as.factor(Style),
+         Subdivision = as.factor(Subdivision),
+         Laundry.Location = as.factor(Laundry.Location),
+         High.School = as.factor(High.School)) %>%
+  filter(Year.Built >= 1800 & Year.Built <= 2022)
+
+housing_model <- lm(Sold.Price ~ Sold.Date+Book.Section+Postal.Code+Total.SqFt.+Year.Built+Style+Total.Bedrooms+Total.Bathrooms+Garage.Stalls, data = FM_Housing)
+model_summary <- summary(housing_model)
+
+```
+
+# Some Visualizations from the Shiny App
+
+```{r}
+
+ggplot(data = FM_Housing, aes(x = Total.SqFt.)) +
+      geom_histogram(bins = 50) +
+      labs(x = "Total Square Footage",
+           y = "Number of Homes",
+           title = "Spread of Home Total Square-Footages")
+
+ggplot(data = FM_Housing, aes(x = Total.Bedrooms)) +
+      geom_histogram(bins = 10) +
+      labs(x = "Number of Bedrooms",
+           y = "Number of Homes",
+           title = "Bedrooms")
+
+ggplot(data = FM_Housing, aes(x = Total.Bathrooms)) +
+      geom_histogram(bins = 10) +
+      labs(x = "Number of Bathrooms",
+           y = "Number of Homes",
+           title = "Bathrooms")
+
+ggplot(data = FM_Housing, aes(x = Garage.Stalls)) +
+      geom_histogram(bins = 11) +
+      labs(x = "Number of Garage Stalls",
+           y = "Number of Homes",
+           title = "Garage Stalls")
+
+model_summary
+
+```
+

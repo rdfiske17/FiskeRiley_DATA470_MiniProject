@@ -1,0 +1,18 @@
+---
+title: "FM Housing Shiny Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows # or columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(bslib)
+library(vetiver)
+library(tibble)
+library(ggplot2)
+library(dplyr)
+```
+

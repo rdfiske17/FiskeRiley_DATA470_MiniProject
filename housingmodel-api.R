@@ -1,6 +1,5 @@
 # Load in Libraries
 library(dplyr)
-library(ggplot2)
 library(dbplyr)
 library(vetiver)
 library(pins)
